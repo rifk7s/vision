@@ -141,12 +141,19 @@ export function FileUpload({
 
   const onSubmit = async () => {
     setIsLoading(true);
-
-    const result = await getAiResult(prompt, files[0]);
-    // console.log(result)
-    setAiResult(result);
-
-    setIsLoading(false);
+    try {
+      const result = await getAiResult(prompt, files[0]);
+      setAiResult(result);
+      setError(null);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'An unexpected error occurred. Please try again.'
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

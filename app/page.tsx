@@ -3,7 +3,7 @@ import { FileUpload } from "@/components/file-upload";
 export default function Home() {
   return (
     <main className="container mx-auto py-10 px-4 md:px-6 flex flex-col gap-6 max-w-xl">
-      <h1 className="text-2xl font-bold mb-6">File Upload Demo</h1>
+      <h1 className="text-2xl font-bold mb-6">Vision</h1>
 
       <div className="max-w-xl mx-auto">
         <FileUpload
