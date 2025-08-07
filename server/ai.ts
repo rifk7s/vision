@@ -5,10 +5,10 @@ import { generateText } from "ai";
 
 export const getAiResult = async (prompt: string, file: File) => {
   const arrayBuffer = await file.arrayBuffer();
-  const base64string = Buffer.from(arrayBuffer).toString("base64");
+  const buffer = Buffer.from(arrayBuffer);
 
   const result = await generateText({
-    model: google("gemini-1.5-flash"),
+    model: google("gemini-2.5-flash"),
     messages: [
       {
         role: "user",
@@ -19,7 +19,7 @@ export const getAiResult = async (prompt: string, file: File) => {
           },
           {
             type: "file",
-            data: base64string,
+            data: buffer,
             mediaType: file.type,
           },
         ],
