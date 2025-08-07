@@ -17,8 +17,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Textarea } from "./ui/textarea";
-
-
+import { getAiResult } from "@/server/ai"; // Adjust the import path as necessary
 interface FileUploadProps {
   maxFiles?: number;
   maxSize?: number; // in bytes
@@ -38,7 +37,7 @@ export function FileUpload({
   className,
   disabled = false,
   onFilesChange,
-}: FileUploadProps) {
+}: FileUploadProps) { 
   const [aiResult, setAiResult] = React.useState<string | null>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [files, setFiles] = React.useState<File[]>([]);
@@ -143,6 +142,7 @@ export function FileUpload({
     setIsLoading(true);
 
     const result = await getAiResult(prompt, files[0]);
+    // console.log(result)
     setAiResult(result);
 
     setIsLoading(false);
