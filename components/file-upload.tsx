@@ -37,7 +37,7 @@ export function FileUpload({
   className,
   disabled = false,
   onFilesChange,
-}: FileUploadProps) { 
+}: Readonly<FileUploadProps>) { 
   const [aiResult, setAiResult] = React.useState<string | null>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [files, setFiles] = React.useState<File[]>([]);
@@ -213,7 +213,7 @@ export function FileUpload({
                   <div className="space-y-2">
                     {files.map((file, index) => (
                       <div
-                        key={index}
+                        key={file.name}
                         className="flex items-center gap-2 p-2 border rounded-md"
                       >
                         <FileIcon className="h-5 w-5 text-muted-foreground flex-shrink-0" />
