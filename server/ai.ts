@@ -4,8 +4,9 @@ import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
 
 export const getAiResult = async (prompt: string, file: File) => {
-    const arrayBuffer = await file.arrayBuffer();
-    const base64string = Buffer.from(arrayBuffer).toString("base64");
+  const arrayBuffer = await file.arrayBuffer();
+  const base64string = Buffer.from(arrayBuffer).toString("base64");
+
   const result = await generateText({
     model: google("gemini-1.5-flash"),
     messages: [
@@ -25,6 +26,6 @@ export const getAiResult = async (prompt: string, file: File) => {
       },
     ],
   });
- 
+
   return result.steps[0].text;
 };

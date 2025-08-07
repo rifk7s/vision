@@ -3,6 +3,7 @@
 import * as React from "react";
 import { UploadCloud, X, FileIcon, AlertCircle, Loader2 } from "lucide-react";
 import { useDropzone } from "react-dropzone";
+import type { FileRejection } from "react-dropzone";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -37,7 +38,7 @@ export function FileUpload({
   className,
   disabled = false,
   onFilesChange,
-}: Readonly<FileUploadProps>) { 
+}: Readonly<FileUploadProps>) {
   const [aiResult, setAiResult] = React.useState<string | null>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [files, setFiles] = React.useState<File[]>([]);
@@ -48,7 +49,7 @@ export function FileUpload({
   >({});
 
   const onDrop = React.useCallback(
-    (acceptedFiles: File[], rejectedFiles: any[]) => {
+    (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
       setError(null);
 
       if (rejectedFiles.length > 0) {
@@ -216,7 +217,7 @@ export function FileUpload({
                         key={file.name}
                         className="flex items-center gap-2 p-2 border rounded-md"
                       >
-                        <FileIcon className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                        <FileIcon className="h-5 w-5 text-muted-foreground shrink-0" />
                         <div className="flex-1 min-w-0">
                           <div className="text-sm font-medium truncate">
                             {file.name}
