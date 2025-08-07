@@ -17,7 +17,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Textarea } from "./ui/textarea";
-import { getAiResult } from "@/server/ai";
+
 
 interface FileUploadProps {
   maxFiles?: number;
