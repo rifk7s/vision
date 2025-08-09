@@ -18,6 +18,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Textarea } from "./ui/textarea";
+import { ImageZoom } from "./ui/image-zoom";
 import { getAiResult } from "@/server/ai"; // Adjust the import path as necessary
 interface FileUploadProps {
   maxFiles?: number;
@@ -47,6 +48,17 @@ export function FileUpload({
   const [uploadProgress, setUploadProgress] = React.useState<
     Record<string, number>
   >({});
+
+  // Cleanup object URLs on unmount
+  React.useEffect(() => {
+    return () => {
+      files.forEach((file) => {
+        if (isImageFile(file)) {
+          URL.revokeObjectURL(createImagePreview(file));
+        }
+      });
+    };
+  }, [files]);
 
   const onDrop = React.useCallback(
     (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
@@ -106,6 +118,12 @@ export function FileUpload({
   const removeFile = (index: number) => {
     const newFiles = [...files];
     const removedFile = newFiles.splice(index, 1)[0];
+    
+    // Clean up object URL for images to prevent memory leaks
+    if (isImageFile(removedFile)) {
+      URL.revokeObjectURL(createImagePreview(removedFile));
+    }
+    
     setFiles(newFiles);
 
     // Remove progress for this file
@@ -129,6 +147,14 @@ export function FileUpload({
     return (
       Number.parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
     );
+  };
+
+  const isImageFile = (file: File) => {
+    return file.type.startsWith('image/');
+  };
+
+  const createImagePreview = (file: File) => {
+    return URL.createObjectURL(file);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -224,7 +250,19 @@ export function FileUpload({
                         key={file.name}
                         className="flex items-center gap-2 p-2 border rounded-md"
                       >
-                        <FileIcon className="h-5 w-5 text-muted-foreground shrink-0" />
+                        {isImageFile(file) ? (
+                          <div className="h-16 w-16 shrink-0 overflow-hidden rounded border flex items-center justify-center bg-muted">
+                            <ImageZoom>
+                              <img
+                                src={createImagePreview(file)}
+                                alt={file.name}
+                                className="max-h-full max-w-full object-contain"
+                              />
+                            </ImageZoom>
+                          </div>
+                        ) : (
+                          <FileIcon className="h-5 w-5 text-muted-foreground shrink-0" />
+                        )}
                         <div className="flex-1 min-w-0">
                           <div className="text-sm font-medium truncate">
                             {file.name}
@@ -264,6 +302,13 @@ export function FileUpload({
                   variant="outline"
                   size="sm"
                   onClick={() => {
+                    // Clean up object URLs for images to prevent memory leaks
+                    files.forEach((file) => {
+                      if (isImageFile(file)) {
+                        URL.revokeObjectURL(createImagePreview(file));
+                      }
+                    });
+                    
                     setFiles([]);
                     setUploadProgress({});
                     if (onFilesChange) {
