@@ -254,7 +254,7 @@ export function FileUpload({
                           <div className="h-16 w-16 shrink-0 overflow-hidden rounded border flex items-center justify-center bg-muted">
                             <ImageZoom>
                               <img
-                                src={createImagePreview(file)}
+                                src={imagePreviews[file.name]}
                                 alt={file.name}
                                 className="max-h-full max-w-full object-contain"
                               />
